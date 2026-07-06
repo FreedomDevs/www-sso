@@ -1,0 +1,47 @@
+:root {
+  --font-family: 'Inter', sans-serif;
+  --background: #000b14;
+  --foreground: #171717;
+  --primary-color: #FF3366;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  font-family: var(--font-family), serif;
+  background: var(--background);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+img,
+video,
+svg {
+  max-width: 100%;
+  display: block;
+}
