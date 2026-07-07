@@ -21,6 +21,19 @@
   color: #ffffff;
 }
 
+.primary:hover {
+  color: var(--background);
+}
+
+.integrations {
+  border: 1px solid gray;
+  color: #ffffff;
+}
+
+.integrations:hover {
+  color: var(--primary-color);
+}
+
 .sm {
   padding: 8px 16px;
   font-size: 14px;

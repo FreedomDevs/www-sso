@@ -1,0 +1,53 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.divider span {
+  flex: 1;
+  height: 1px;
+  background: #2d2236;
+}
+
+.divider p {
+  color: #8f889e;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.socials {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.links {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.links a {
+  color: #ff4b86;
+  text-decoration: none;
+}
+
+.register {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #8f889e;
+}
+
+.register a {
+  color: #ff4b86;
+  text-decoration: none;
+}

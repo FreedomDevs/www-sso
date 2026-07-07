@@ -1,6 +1,6 @@
-import { InputProps } from '@/src/components/ui/Input/Input.types';
-import styles from './Input.module.css';
 import clsx from 'clsx';
+import styles from './Input.module.css';
+import { InputProps } from './Input.types';
 
 export function Input({
   label,
@@ -14,12 +14,6 @@ export function Input({
 }: InputProps) {
   return (
     <div className={styles.wrapper}>
-      {label && (
-        <label htmlFor={id} className={styles.label}>
-          {id}
-        </label>
-      )}
-
       <div
         className={clsx(
           styles.container,
@@ -29,7 +23,20 @@ export function Input({
       >
         {leftIcon && <span className={styles.icon}>{leftIcon}</span>}
 
-        <input id={id} className={clsx(styles.input, className)} {...props} />
+        <div className={styles.inputWrapper}>
+          <input
+            id={id}
+            className={clsx(styles.input, className)}
+            placeholder=" "
+            {...props}
+          />
+
+          {label && (
+            <label htmlFor={id} className={styles.label}>
+              {label}
+            </label>
+          )}
+        </div>
 
         {rightIcon && <span className={styles.icon}>{rightIcon}</span>}
       </div>
