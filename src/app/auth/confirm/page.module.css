@@ -8,14 +8,11 @@
 
 .card {
   position: relative;
-
   width: 100%;
   max-width: 440px;
-
   padding: 32px;
   border: 1px solid #2d2236;
   border-radius: 20px;
-
   background: #17131f;
 
   display: flex;
@@ -26,20 +23,22 @@
 }
 
 .card::before {
-  content: "";
-
+  content: '';
   position: absolute;
   inset: -60px;
-
   z-index: -2;
 
   background:
-    radial-gradient(circle at top left,
-    rgba(255, 75, 134, 0.25),
-    transparent 45%),
-    radial-gradient(circle at bottom right,
-    rgba(145, 70, 255, 0.18),
-    transparent 45%);
+    radial-gradient(
+      circle at top left,
+      rgba(255, 75, 134, 0.25),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(145, 70, 255, 0.18),
+      transparent 45%
+    );
 
   filter: blur(70px);
 }
@@ -61,10 +60,12 @@
 
   border-radius: 12px;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .logo h1 {
   font-size: 30px;
+  margin: 0;
 }
 
 .header {
@@ -96,7 +97,7 @@
   gap: 4px;
 }
 
-.clientInfo p{
+.clientInfo p {
   color: #8f889e;
   font-size: 14px;
 }
@@ -107,14 +108,9 @@
   gap: 12px;
 }
 
-.permissions h4 {
-
-}
-
 .permissions ul {
   margin: 0;
   padding-left: 18px;
-
   color: #c8c2d6;
 
   display: flex;
@@ -125,4 +121,116 @@
 .actions {
   display: flex;
   gap: 12px;
+}
+
+.actions > * {
+  flex: 1;
+}
+
+
+@media (max-width: 768px) {
+  .page {
+    padding: 20px;
+  }
+
+  .card {
+    padding: 28px 24px;
+  }
+
+  .logo h1 {
+    font-size: 26px;
+  }
+
+  .header h2 {
+    font-size: 24px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .page {
+    padding: 16px;
+  }
+
+  .card {
+    padding: 20px;
+    border-radius: 16px;
+    gap: 18px;
+  }
+
+  .card::before {
+    inset: -30px;
+    filter: blur(40px);
+  }
+
+  .logo {
+    gap: 10px;
+  }
+
+  .logoWrapper {
+    width: 40px;
+    height: 40px;
+  }
+
+  .logo h1 {
+    font-size: 24px;
+  }
+
+  .header h2 {
+    font-size: 22px;
+  }
+
+  .header p {
+    font-size: 14px;
+  }
+
+  .client {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .clientInfo h3 {
+    font-size: 16px;
+  }
+
+  .clientInfo p {
+    font-size: 13px;
+  }
+
+  .permissions ul {
+    font-size: 14px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions > * {
+    width: 100%;
+  }
+}
+
+
+@media (max-width: 360px) {
+  .card {
+    padding: 16px;
+  }
+
+  .logo {
+    flex-direction: column;
+  }
+
+  .logo h1 {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  .header h2 {
+    font-size: 20px;
+  }
+
+  .client {
+    flex-direction: column;
+    text-align: center;
+  }
 }
