@@ -8,38 +8,64 @@ import { Button } from '@/src/components/ui/Button';
 
 import styles from './LoginForm.module.css';
 import { FaGithub, FaGoogle } from 'react-icons/fa';
-
-type LoginFormValues = {
-  email: string;
-  password: string;
-};
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useLogin } from '@/src/api/hooks';
+import { SessionManager } from '@/src/lib/sessionManager';
+import { LoginRequest } from '@/src/api/data';
+import { useState } from 'react';
 
 export function LoginForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormValues>({
+  } = useForm<LoginRequest>({
     defaultValues: {
-      email: '',
+      login: '',
       password: '',
     },
   });
 
-  const onSubmit = (data: LoginFormValues) => {
-    console.log(data);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const query = searchParams.toString();
+
+  const [login1, setLogin1] = useState('');
+
+  const login = useLogin({
+    onSuccess(data) {
+      SessionManager.setCurrent({
+        username: login1,
+        masterToken: data.refresh_token,
+      });
+
+      if (searchParams.has('client_id')) {
+        router.replace(`/auth/confirm?${query}`);
+        return;
+      }
+
+      router.replace('/');
+    },
+    onError(error) {
+      console.error(error);
+    },
+  });
+
+  const onSubmit = (data: LoginRequest) => {
+    setLogin1(data.login);
+    login.mutate(data);
   };
 
   return (
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
       <Input
-        id="email"
-        placeholder="Email или имя пользователя"
+        id="login"
+        placeholder="имя пользователя"
         variant="default"
-        label="Email или Login"
-        error={errors.email?.message}
-        {...register('email', {
-          required: 'Введите email',
+        label="Login"
+        error={errors.login?.message}
+        {...register('login', {
+          required: 'Введите login',
         })}
       />
 
@@ -60,7 +86,7 @@ export function LoginForm() {
       />
 
       <Button type="submit" fullWidth variant="primary" size="sm">
-        Продолжить
+        {login.isPending ? 'Входим...' : 'Продолжить'}
       </Button>
 
       <div className={styles.divider}>

@@ -1,5 +1,4 @@
 export type Session = {
-  id: string;
   username: string;
   masterToken: string;
 };
@@ -15,8 +14,19 @@ export class SessionManager {
     localStorage.setItem('sessions', JSON.stringify(sessions));
   }
 
-  static remove(id: string) {
-    const sessions = this.getAll().filter((s) => s.id !== id);
+  static remove(masterToken: string): void {
+    const sessions = this.getAll().filter((s) => s.masterToken !== masterToken);
     localStorage.setItem('sessions', JSON.stringify(sessions));
+  }
+
+  static getCurrent(): Session {
+    return JSON.parse(localStorage.getItem('currentSession') ?? '');
+  }
+
+  static setCurrent(session: Session): void {
+    if (!this.getAll().find((s: Session): boolean => s === session))
+      this.add(session);
+
+    localStorage.setItem('currentSession', JSON.stringify(session));
   }
 }

@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import styles from './page.module.css';
 import { LoginForm } from '@/src/components/auth/LoginForm/LoginForm';
 import Image from 'next/image';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: 'ElysiaID | Вход',
@@ -29,8 +30,9 @@ export default function LoginPage() {
           <h2>Добро пожаловать</h2>
           <p>Войдите в свой аккаунт</p>
         </div>
-
-        <LoginForm />
+        <Suspense fallback={null}>
+          <LoginForm />
+        </Suspense>
       </div>
     </main>
   );
