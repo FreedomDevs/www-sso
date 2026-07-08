@@ -17,6 +17,7 @@ body {
   min-height: 100%;
   font-family: var(--font-family), serif;
   background: var(--background);
+  color: #ffffff;
 }
 
 a {
