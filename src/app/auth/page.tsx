@@ -3,21 +3,28 @@
 import { useSearchParams } from 'next/navigation';
 import { useAuthorize } from '@/src/hooks/useAuthorize';
 
-export default function AuthorizePage() {
-  const searchParams = useSearchParams();
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
+export default function AuthorizePage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const query = searchParams.toString();
   const clientId: string | null = searchParams.get('client_id');
 
-  const auth = useAuthorize({ clientId });
+  const { step } = useAuthorize({ clientId });
 
-  return (
-    <div>
-      <h1>SSO Authorize</h1>
-
-      <p>Client: {clientId}</p>
-      <hr />
-
-      <p>Current step: {auth.step}</p>
-    </div>
-  );
+  useEffect(() => {
+    switch (step) {
+      case 'login':
+        router.push(`/auth/login?client_id=${clientId}`);
+        break;
+      case 'select':
+        router.replace(`/auth/select?${query}`);
+        break;
+      case 'confirm':
+        router.replace(`/auth/confirm?${query}`);
+        break;
+    }
+  }, [step, query, router]);
 }
