@@ -4,10 +4,32 @@ import { ErrorResponse } from '@/src/api/data';
 
 const onError = (error: unknown) => {
   if (axios.isAxiosError<ErrorResponse>(error)) {
-    return Promise.reject(error.response?.data);
+    if (error.response?.data) {
+      return Promise.reject(error.response.data);
+    }
+
+    return Promise.reject({
+      error: {
+        message: 'Не удалось подключиться к серверу',
+        code: 'NETWORK_ERROR',
+      },
+      meta: {
+        traceId: '',
+        timestamp: new Date().toISOString(),
+      },
+    } satisfies ErrorResponse);
   }
 
-  return Promise.reject(error);
+  return Promise.reject({
+    error: {
+      message: 'Неизвестная ошибка',
+      code: 'UNKNOWN',
+    },
+    meta: {
+      traceId: '',
+      timestamp: new Date().toISOString(),
+    },
+  } satisfies ErrorResponse);
 };
 
 // Для работы с SSO

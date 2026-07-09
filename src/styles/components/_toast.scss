@@ -1,0 +1,68 @@
+@use "../abstracts" as *;
+
+.toast {
+  padding: 14px 16px !important;
+
+  background: rgba(12, 20, 31, 0.96) !important;
+  color: var(--white) !important;
+
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: var(--radius-md) !important;
+
+  box-shadow:
+          0 10px 30px rgba(0, 0, 0, 0.35),
+          inset 0 1px rgba(255, 255, 255, 0.05);
+
+  @include glass;
+
+  [data-title] {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--white);
+  }
+
+  [data-description] {
+    margin-top: 4px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  button {
+    border-radius: var(--radius-sm);
+    @include transition;
+  }
+
+  [data-button] {
+    background: var(--primary) !important;
+    color: var(--white) !important;
+
+    &:hover {
+      filter: brightness(1.1);
+    }
+  }
+
+  [data-cancel] {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: var(--white) !important;
+  }
+
+  &[data-type="success"] {
+    border-left: 4px solid var(--success) !important;
+  }
+
+  &[data-type="error"] {
+    border-left: 4px solid var(--error) !important;
+  }
+
+  &[data-type="warning"] {
+    border-left: 4px solid var(--warning) !important;
+  }
+
+  &[data-type="info"] {
+    border-left: 4px solid var(--info) !important;
+  }
+
+  &[data-type="loading"] {
+    border-left: 4px solid var(--primary) !important;
+  }
+}

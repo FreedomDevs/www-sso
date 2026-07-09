@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import './globals.css';
+import '../styles/globals.scss';
 import { Toaster } from 'sonner';
 import { TanstackQueryProvider } from '@/src/providers';
 
@@ -32,7 +32,14 @@ export default function RootLayout({
       <body>
         <TanstackQueryProvider>
           {children}
-          <Toaster position="top-center" richColors />
+          <Toaster
+            theme="dark"
+            position="top-center"
+            richColors
+            toastOptions={{
+              className: 'toast',
+            }}
+          />
         </TanstackQueryProvider>
       </body>
     </html>

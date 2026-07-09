@@ -8,6 +8,11 @@ import { Input } from '@/src/components/ui/Input';
 import { Button } from '@/src/components/ui/Button';
 
 import styles from './RegisterForm.module.css';
+import {
+  AuthDivider,
+  AuthFooter,
+  AuthSocials,
+} from '@/src/components/auth/components';
 
 type RegisterFormValues = {
   email: string;
@@ -92,39 +97,15 @@ export function RegisterForm() {
         Продолжить
       </Button>
 
-      <div className={styles.divider}>
-        <span />
-        <p>или продолжите с</p>
-        <span />
-      </div>
+      <AuthDivider />
 
-      <div className={styles.socials}>
-        <Button
-          type="button"
-          size="sm"
-          variant="integrations"
-          leftIcon={<FaGoogle />}
-          fullWidth
-        >
-          Google
-        </Button>
+      <AuthSocials />
 
-        <Button
-          type="button"
-          size="sm"
-          variant="integrations"
-          leftIcon={<FaGithub />}
-          fullWidth
-        >
-          GitHub
-        </Button>
-      </div>
-
-      <div className={styles.register}>
-        <span>Уже есть аккаунт?</span>
-
-        <Link href="/auth/login">Войти</Link>
-      </div>
+      <AuthFooter
+        text="Уже есть аккаунт?"
+        linkText="Войти"
+        href="/auth/login"
+      />
     </form>
   );
 }

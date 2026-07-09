@@ -17,14 +17,14 @@
 }
 
 .primary {
-  border: 1px solid var(--primary-color);
-  background: var(--primary-color);
+  border: 1px solid var(--primary);
+  background: var(--primary);
   color: #ffffff;
 }
 
 .primary:hover {
   background: transparent;
-  color: var(--primary-color);
+  color: var(--primary);
 
 }
 
@@ -34,8 +34,8 @@
 }
 
 .integrations:hover {
-  color: var(--primary-color);
-  border: 1px solid var(--primary-color);
+  color: var(--primary);
+  border: 1px solid var(--primary);
 }
 
 .sm {

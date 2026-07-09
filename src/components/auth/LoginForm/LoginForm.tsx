@@ -1,63 +1,27 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
-import Link from 'next/link';
-
 import { Input } from '@/src/components/ui/Input';
 import { Button } from '@/src/components/ui/Button';
 
 import styles from './LoginForm.module.css';
-import { FaGithub, FaGoogle } from 'react-icons/fa';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useLogin } from '@/src/api/hooks';
-import { SessionManager } from '@/src/lib/sessionManager';
-import { LoginRequest } from '@/src/api/data';
-import { useState } from 'react';
+import {
+  AuthDivider,
+  AuthFooter,
+  AuthLinks,
+  AuthSocials,
+} from '@/src/components/auth/components';
+import { useLoginForm } from '@/src/components/auth/hooks/useLoginForm';
 
 export function LoginForm() {
   const {
     register,
-    handleSubmit,
     formState: { errors },
-  } = useForm<LoginRequest>({
-    defaultValues: {
-      login: '',
-      password: '',
-    },
-  });
-
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const query = searchParams.toString();
-
-  const [login1, setLogin1] = useState('');
-
-  const login = useLogin({
-    onSuccess(data) {
-      SessionManager.setCurrent({
-        username: login1,
-        masterToken: data.refresh_token,
-      });
-
-      if (searchParams.has('client_id')) {
-        router.replace(`/auth/confirm?${query}`);
-        return;
-      }
-
-      router.replace('/');
-    },
-    onError(error) {
-      console.error(error);
-    },
-  });
-
-  const onSubmit = (data: LoginRequest) => {
-    setLogin1(data.login);
-    login.mutate(data);
-  };
+    login,
+    onSubmit,
+  } = useLoginForm();
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+    <form className={styles.form} onSubmit={onSubmit}>
       <Input
         id="login"
         placeholder="имя пользователя"
@@ -85,49 +49,25 @@ export function LoginForm() {
         })}
       />
 
+      {errors.root && (
+        <div className={styles.serverError}>{errors.root.message}</div>
+      )}
+
       <Button type="submit" fullWidth variant="primary" size="sm">
         {login.isPending ? 'Входим...' : 'Продолжить'}
       </Button>
 
-      <div className={styles.divider}>
-        <span />
-        <p>или продолжите с</p>
-        <span />
-      </div>
+      <AuthDivider />
 
-      <div className={styles.socials}>
-        <Button
-          size="sm"
-          variant="integrations"
-          leftIcon={<FaGoogle />}
-          fullWidth
-          type="button"
-        >
-          Google
-        </Button>
+      <AuthSocials />
 
-        <Button
-          size="sm"
-          variant="integrations"
-          leftIcon={<FaGithub />}
-          fullWidth
-          type="button"
-        >
-          GitHub
-        </Button>
-      </div>
+      <AuthLinks />
 
-      <div className={styles.links}>
-        <Link href="/passwordless">Войти с Passkey</Link>
-
-        <Link href="/forgot-password">Забыли пароль?</Link>
-      </div>
-
-      <div className={styles.register}>
-        <span>Нет аккаунта?</span>
-
-        <Link href="/auth/register">Зарегистрироваться</Link>
-      </div>
+      <AuthFooter
+        text="Нет аккаунта?"
+        linkText="Зарегистрироваться"
+        href="/auth/register"
+      />
     </form>
   );
 }
