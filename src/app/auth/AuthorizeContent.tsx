@@ -1,17 +1,29 @@
 'use client';
 
-import { useSearchParams, useRouter } from 'next/navigation';
+import {
+  useSearchParams,
+  useRouter,
+  ReadonlyURLSearchParams,
+} from 'next/navigation';
 import { useAuthorize } from '@/src/hooks/useAuthorize';
 import { useEffect } from 'react';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
-export default function AuthorizeContent() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+type RedirectStep = 'login' | 'register' | 'select' | 'confirm';
 
-  const query = searchParams.toString();
-  const clientId = searchParams.get('client_id');
+const ROUTES: Record<RedirectStep, string> = {
+  login: '/auth/login',
+  register: '/auth/register',
+  select: '/auth/select',
+  confirm: '/auth/confirm',
+};
 
-  const intent =
+export default function AuthorizeContent(): null {
+  const router: AppRouterInstance = useRouter();
+  const searchParams: ReadonlyURLSearchParams = useSearchParams();
+  const clientId: string | null = searchParams.get('client_id');
+
+  const intent: 'login' | 'register' =
     (searchParams.get('intent') as 'login' | 'register' | null) ?? 'login';
 
   const { step } = useAuthorize({
@@ -19,25 +31,18 @@ export default function AuthorizeContent() {
     intent,
   });
 
-  useEffect(() => {
-    switch (step) {
-      case 'login':
-        router.replace(`/auth/login${query ? `?${query}` : ''}`);
-        break;
-
-      case 'register':
-        router.replace(`/auth/register${query ? `?${query}` : ''}`);
-        break;
-
-      case 'select':
-        router.replace(`/auth/select${query ? `?${query}` : ''}`);
-        break;
-
-      case 'confirm':
-        router.replace(`/auth/confirm${query ? `?${query}` : ''}`);
-        break;
+  useEffect((): void => {
+    if (step === 'loading') {
+      return;
     }
-  }, [step, query, router]);
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('intent');
+
+    const suffix = params.toString() ? `?${params.toString()}` : '';
+
+    router.replace(`${ROUTES[step]}${suffix}`);
+  }, [step, router, searchParams]);
 
   return null;
 }

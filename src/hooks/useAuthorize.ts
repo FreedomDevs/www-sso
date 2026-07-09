@@ -12,6 +12,8 @@ type UseAuthorizeProps = {
 export function useAuthorize({ clientId, intent }: UseAuthorizeProps) {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(true);
+  const authorizeIntent: AuthorizeIntent =
+    intent === 'register' ? 'register' : 'login';
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -24,7 +26,7 @@ export function useAuthorize({ clientId, intent }: UseAuthorizeProps) {
   const step: AuthorizeStep = loading
     ? 'loading'
     : sessions.length === 0
-      ? intent
+      ? authorizeIntent
       : currentSession
         ? 'confirm'
         : 'select';
