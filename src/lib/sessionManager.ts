@@ -4,29 +4,52 @@ export type Session = {
 };
 
 export class SessionManager {
-  static getAll(): Session[] {
-    return JSON.parse(localStorage.getItem('sessions') ?? '[]');
+  private static readonly SESSIONS_KEY = 'sessions';
+  private static readonly CURRENT_KEY = 'currentSession';
+
+  private static load<T>(key: string, fallback: T): T {
+    const value = localStorage.getItem(key);
+
+    if (!value) return fallback;
+
+    try {
+      return JSON.parse(value);
+    } catch {
+      return fallback;
+    }
   }
 
-  static add(session: Session) {
+  private static save<T>(key: string, value: T): void {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  static getAll(): Session[] {
+    return this.load(this.SESSIONS_KEY, []);
+  }
+
+  static add(session: Session): void {
     const sessions = this.getAll();
-    sessions.push(session);
-    localStorage.setItem('sessions', JSON.stringify(sessions));
+
+    if (sessions.some((s) => s.masterToken === session.masterToken)) return;
+
+    this.save(this.SESSIONS_KEY, [...sessions, session]);
   }
 
   static remove(masterToken: string): void {
     const sessions = this.getAll().filter((s) => s.masterToken !== masterToken);
-    localStorage.setItem('sessions', JSON.stringify(sessions));
+    this.save(this.SESSIONS_KEY, sessions);
+
+    if (this.getCurrent()?.masterToken === masterToken) {
+      localStorage.removeItem(this.CURRENT_KEY);
+    }
   }
 
-  static getCurrent(): Session {
-    return JSON.parse(localStorage.getItem('currentSession') ?? '');
+  static getCurrent(): Session | null {
+    return this.load(this.CURRENT_KEY, null);
   }
 
   static setCurrent(session: Session): void {
-    if (!this.getAll().find((s: Session): boolean => s === session))
-      this.add(session);
-
-    localStorage.setItem('currentSession', JSON.stringify(session));
+    this.add(session);
+    this.save(this.CURRENT_KEY, session);
   }
 }
