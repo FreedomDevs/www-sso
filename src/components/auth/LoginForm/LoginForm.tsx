@@ -9,8 +9,9 @@ import {
   AuthFooter,
   AuthLinks,
   AuthSocials,
+  authValidation,
 } from '@/src/components/auth/components';
-import { useLoginForm } from '@/src/components/auth/hooks/useLoginForm';
+import { useLoginForm } from '@/src/components/auth/LoginForm/useLoginForm';
 
 export function LoginForm() {
   const {
@@ -28,9 +29,7 @@ export function LoginForm() {
         variant="default"
         label="Login"
         error={errors.login?.message}
-        {...register('login', {
-          required: 'Введите login',
-        })}
+        {...register('login', authValidation.login)}
       />
 
       <Input
@@ -40,13 +39,7 @@ export function LoginForm() {
         variant="default"
         label="Password"
         error={errors.password?.message}
-        {...register('password', {
-          required: 'Введите пароль',
-          minLength: {
-            value: 6,
-            message: 'Минимум 6 символов',
-          },
-        })}
+        {...register('password', authValidation.password)}
       />
 
       {errors.root && (

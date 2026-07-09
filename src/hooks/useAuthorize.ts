@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Session, SessionManager } from '@/src/lib/sessionManager';
 
-type AuthorizeStep = 'loading' | 'login' | 'select' | 'confirm' | 'redirect';
+type AuthorizeStep =
+  'loading' | 'login' | 'select' | 'confirm' | 'redirect' | 'register';
+type AuthorizeIntent = 'login' | 'register';
 type UseAuthorizeProps = {
   clientId: string | null;
+  intent: AuthorizeIntent;
 };
 
-export function useAuthorize({ clientId }: UseAuthorizeProps) {
+export function useAuthorize({ clientId, intent }: UseAuthorizeProps) {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -21,7 +24,7 @@ export function useAuthorize({ clientId }: UseAuthorizeProps) {
   const step: AuthorizeStep = loading
     ? 'loading'
     : sessions.length === 0
-      ? 'login'
+      ? intent
       : currentSession
         ? 'confirm'
         : 'select';

@@ -1,9 +1,5 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
-import Link from 'next/link';
-import { FaGithub, FaGoogle } from 'react-icons/fa';
-
 import { Input } from '@/src/components/ui/Input';
 import { Button } from '@/src/components/ui/Button';
 
@@ -12,46 +8,27 @@ import {
   AuthDivider,
   AuthFooter,
   AuthSocials,
+  authValidation,
 } from '@/src/components/auth/components';
-
-type RegisterFormValues = {
-  email: string;
-  login: string;
-  password: string;
-};
+import { useRegisterForm } from '@/src/components/auth/RegisterForm/useRegisterForm';
 
 export function RegisterForm() {
   const {
     register,
-    handleSubmit,
     formState: { errors },
-  } = useForm<RegisterFormValues>({
-    defaultValues: {
-      email: '',
-      login: '',
-      password: '',
-    },
-  });
-
-  const onSubmit = (data: RegisterFormValues) => {
-    console.log(data);
-  };
+    registerF,
+    onSubmit,
+  } = useRegisterForm();
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+    <form className={styles.form} onSubmit={onSubmit}>
       <Input
         id="email"
         placeholder="Email"
         variant="default"
         label="Email"
         error={errors.email?.message}
-        {...register('email', {
-          required: 'Введите email',
-          pattern: {
-            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            message: 'Введите корректный email',
-          },
-        })}
+        {...register('email', authValidation.email)}
       />
 
       <Input
@@ -60,21 +37,7 @@ export function RegisterForm() {
         variant="default"
         label="Логин"
         error={errors.login?.message}
-        {...register('login', {
-          required: 'Введите логин',
-          minLength: {
-            value: 3,
-            message: 'Логин минимум 3 символа',
-          },
-          maxLength: {
-            value: 16,
-            message: 'Логин максимум 16 символов',
-          },
-          pattern: {
-            value: /^[a-zA-Z_0-9]+$/,
-            message: 'Только латинские буквы, цифры и символ _',
-          },
-        })}
+        {...register('login', authValidation.login)}
       />
 
       <Input
@@ -84,21 +47,18 @@ export function RegisterForm() {
         variant="default"
         label="Пароль"
         error={errors.password?.message}
-        {...register('password', {
-          required: 'Введите пароль',
-          minLength: {
-            value: 6,
-            message: 'Пароль минимум 6 символов',
-          },
-        })}
+        {...register('password', authValidation.password)}
       />
 
+      {errors.root && (
+        <div className={styles.serverError}>{errors.root.message}</div>
+      )}
+
       <Button type="submit" fullWidth variant="primary" size="sm">
-        Продолжить
+        {registerF.isPending ? 'Входим...' : 'Продолжить'}
       </Button>
 
       <AuthDivider />
-
       <AuthSocials />
 
       <AuthFooter

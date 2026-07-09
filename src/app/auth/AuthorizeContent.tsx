@@ -11,21 +11,33 @@ export default function AuthorizeContent() {
   const query = searchParams.toString();
   const clientId = searchParams.get('client_id');
 
-  const { step } = useAuthorize({ clientId });
+  const intent =
+    (searchParams.get('intent') as 'login' | 'register' | null) ?? 'login';
+
+  const { step } = useAuthorize({
+    clientId,
+    intent,
+  });
 
   useEffect(() => {
     switch (step) {
       case 'login':
-        router.push(`/auth/login?client_id=${clientId}`);
+        router.replace(`/auth/login${query ? `?${query}` : ''}`);
         break;
+
+      case 'register':
+        router.replace(`/auth/register${query ? `?${query}` : ''}`);
+        break;
+
       case 'select':
-        router.replace(`/auth/select?${query}`);
+        router.replace(`/auth/select${query ? `?${query}` : ''}`);
         break;
+
       case 'confirm':
-        router.replace(`/auth/confirm?${query}`);
+        router.replace(`/auth/confirm${query ? `?${query}` : ''}`);
         break;
     }
-  }, [step, query, clientId, router]);
+  }, [step, query, router]);
 
   return null;
 }
