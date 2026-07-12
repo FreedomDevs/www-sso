@@ -1,4 +1,4 @@
 export interface RegisterResponse {
-  email_verification_token: string;
+  email_verefication_token: string;
   // passkey_challenge: string;
 }

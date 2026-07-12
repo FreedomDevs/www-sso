@@ -2,15 +2,15 @@
 
 import { useState } from 'react';
 import { Button } from '@/src/components/ui/Button';
+import { OtpInput } from '@/src/components/ui/OtpInput';
 
 export default function Home() {
-  const [count, setCount] = useState(0)
+  const [code, setCode] = useState('');
 
   return (
     <>
-      <h2>Counter: {count}</h2>
-
-      <Button onClick={() => setCount(count + 1)} variant={'primary'} size={'sm'}>PIPISKA</Button>
+      <h1>code: {code}</h1>
+      <OtpInput value={code} onChange={setCode}/>
     </>
   );
 }

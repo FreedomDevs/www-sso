@@ -26,8 +26,12 @@ export function useRegisterForm() {
   const registerF = useRegister({
     onSuccess(data: RegisterResponse): void {
       const params = new URLSearchParams(searchParams.toString());
-      params.set('emailToken', data.email_verification_token);
-      router.replace(`/auth/confirm_email?emailToken=${data.email_verification_token}`);
+
+      params.set('emailToken', data.email_verefication_token);
+      params.set('email', form.getValues('email'));
+      params.set('login', form.getValues('login'));
+
+      router.replace(`/auth/confirm_email?${params.toString()}`);
     },
     onError(error: ErrorResponse): void {
       toast.error(error.error.message);

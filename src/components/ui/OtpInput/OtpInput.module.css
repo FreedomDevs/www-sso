@@ -1,0 +1,48 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.input {
+  width: 48px;
+  height: 56px;
+
+  border: 2px solid #515151;
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: #fff;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.separator {
+  font-size: 28px;
+  color: #777;
+}
+
+.error .input {
+  border-color: var(--error);
+}
+
+.errorText {
+  color: var(--error);
+  font-size: 13px;
+}
