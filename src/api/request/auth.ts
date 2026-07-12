@@ -116,7 +116,7 @@ export const clientInfo = async (
   data: ClientInfoRequest
 ): Promise<ClientInfoResponse> => {
   const response = await ssoApi.get<SuccessResponse<ClientInfoResponse>>(
-    `/auth/create_child_token/${data.client_id}`
+    `/auth/client_info/${data.client_id}`
   );
 
   if (!response.data.data) {
