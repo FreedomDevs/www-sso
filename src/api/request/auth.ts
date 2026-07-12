@@ -10,6 +10,10 @@ import {
   ResendEmailRequest,
   RefreshRequest,
   CheckRefreshTokenRequest,
+  CreateChildTokenRequest,
+  CreateChildTokenResponse,
+  ClientInfoRequest,
+  ClientInfoResponse,
 } from '@/src/api/data';
 import { RefreshResponse } from '@/src/api/data/RefreshResponse';
 
@@ -91,4 +95,33 @@ export const checkRefreshToken = async (
   );
 
   return response.data;
+};
+
+export const createChildToken = async (
+  data: CreateChildTokenRequest
+): Promise<CreateChildTokenResponse> => {
+  const response = await ssoApi.post<SuccessResponse<CreateChildTokenResponse>>(
+    '/auth/create_child_token',
+    data
+  );
+
+  if (!response.data.data) {
+    throw new Error('Response data is missing');
+  }
+
+  return response.data.data;
+};
+
+export const clientInfo = async (
+  data: ClientInfoRequest
+): Promise<ClientInfoResponse> => {
+  const response = await ssoApi.get<SuccessResponse<ClientInfoResponse>>(
+    `/auth/create_child_token/${data.client_id}`
+  );
+
+  if (!response.data.data) {
+    throw new Error('Response data is missing');
+  }
+
+  return response.data.data;
 };

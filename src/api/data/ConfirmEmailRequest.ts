@@ -1,4 +1,4 @@
 export interface ConfirmEmailRequest {
-  email_verification_token: string;
+  email_verefication_token: string;
   code: string;
 }

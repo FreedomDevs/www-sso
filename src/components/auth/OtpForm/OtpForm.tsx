@@ -55,8 +55,8 @@ export function OtpForm({ emailToken, login, client_id }: Props) {
     setSeconds(20);
 
     const request: ConfirmEmailRequest = {
-      email_verification_token: emailToken,
-      code: code,
+      email_verefication_token: emailToken,
+      code: code.toString(),
     };
 
     sendData.mutate(request);
