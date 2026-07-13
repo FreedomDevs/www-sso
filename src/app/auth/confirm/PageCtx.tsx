@@ -18,20 +18,24 @@ export function PageCtx({ client_id }: Props) {
     description: 'Крутая админ панель очень крутая',
   };
 
-  const [clientData, setClientData] = useState<ClientInfoResponse | null>(null)
+  const [clientData, setClientData] = useState<ClientInfoResponse | null>(null);
 
   const getClientInfo = useGetClientInfo({
     onSuccess(data: ClientInfoResponse): void {
-      setClientData(data)
+      setClientData(data);
     },
     onError(error: ErrorResponse): void {
-      if (error.error) toast.error(error.error.message);
+      if (error.error) {
+        toast.error(error.error.message);
+      } else {
+        toast.error('Возникла не предвиденная ошибка')
+      }
     },
   });
 
   useEffect(() => {
     getClientInfo.mutate({ client_id });
-  }, [client_id, getClientInfo]);
+  }, [client_id]);
 
   return (
     <main className={styles.page}>
