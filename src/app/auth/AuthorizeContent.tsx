@@ -26,12 +26,21 @@ export default function AuthorizeContent(): null {
   const intent: 'login' | 'register' =
     (searchParams.get('intent') as 'login' | 'register' | null) ?? 'login';
 
-  const { step } = useAuthorize({
+  const { step, redirectTo, loading } = useAuthorize({
     clientId,
     intent,
   });
 
   useEffect((): void => {
+    if (loading) {
+      return;
+    }
+
+    if(redirectTo) {
+      router.replace(redirectTo);
+      return;
+    }
+
     if (step === 'loading') {
       return;
     }
@@ -42,7 +51,8 @@ export default function AuthorizeContent(): null {
     const suffix = params.toString() ? `?${params.toString()}` : '';
 
     router.replace(`${ROUTES[step]}${suffix}`);
-  }, [step, router, searchParams]);
+
+  }, [step, router, searchParams, loading, redirectTo]);
 
   return null;
 }
