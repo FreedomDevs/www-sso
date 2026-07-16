@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import styles from './page.module.css';
 import Image from 'next/image';
 import { RegisterForm } from '@/src/components/auth/RegisterForm/RegisterForm';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: 'ElysiaID | Регистрация',
@@ -30,7 +31,9 @@ export default function RegisterPage() {
           <p>Логин должен совпадать с игровым!</p>
         </div>
 
-        <RegisterForm />
+        <Suspense fallback={null}>
+          <RegisterForm />
+        </Suspense>
       </div>
     </main>
   );
