@@ -9,16 +9,20 @@ export const metadata: Metadata = {
 type Props = {
   searchParams: Promise<{
     client_id?: string;
+    state?: string;
   }>;
 };
 
 export default async function ConfirmPage({ searchParams }: Props) {
-  const { client_id } = await searchParams;
+  const { client_id, state } = await searchParams;
 
   if (!client_id) {
     redirect('/auth');
   }
 
+  if (!state) {
+    return <PageCtx client_id={client_id} state={undefined} />;
+  }
 
-  return <PageCtx client_id={client_id}/>;
+  return <PageCtx client_id={client_id} state={state} />;
 }

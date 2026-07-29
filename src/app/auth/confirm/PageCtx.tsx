@@ -16,11 +16,15 @@ import { SessionManager } from '@/src/lib/sessionManager';
 
 type Props = {
   client_id: string;
+  state: string | undefined;
 };
 
-export function PageCtx({ client_id }: Props) {
+export function PageCtx({ client_id, state }: Props) {
   const [clientData, setClientData] = useState<ClientInfoResponse | null>(null);
   const router = useRouter();
+  //
+  // console.log({ state });
+  // console.log(clientData?.redirect_url);
 
   const { mutate } = useGetClientInfo({
     onSuccess(data: ClientInfoResponse): void {
@@ -52,7 +56,15 @@ export function PageCtx({ client_id }: Props) {
         return;
       }
 
-      const uri = `${clientData.redirect_url}?token=${data.refresh_token}`;
+      const params = new URLSearchParams();
+
+      params.set('token', data.refresh_token);
+
+      if (state) {
+        params.set('state', state);
+      }
+
+      const uri = `${clientData.redirect_url}?${params.toString()}`;
 
       toast.success(`Вы успешно вошли в ${clientData.client_name}`);
       router.replace(uri);
