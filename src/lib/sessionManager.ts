@@ -52,4 +52,9 @@ export class SessionManager {
     this.add(session);
     this.save(this.CURRENT_KEY, session);
   }
+
+  static removeAll(): void {
+    localStorage.removeItem(this.SESSIONS_KEY);
+    localStorage.removeItem(this.CURRENT_KEY);
+  }
 }

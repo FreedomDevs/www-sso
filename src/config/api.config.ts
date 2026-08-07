@@ -1,5 +1,5 @@
 class ApiConfig {
-  baseURL = 'https://elysium-gateway.mcbeeland.ru/';
+  baseURL = 'https://gateway.elysiac.fun/';
 }
 
 export const apiConfig = new ApiConfig();
