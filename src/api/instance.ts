@@ -12,7 +12,22 @@ declare module 'axios' {
 }
 
 const onError = (error: unknown) => {
-  if (axios.isAxiosError<ErrorResponse>(error)) {
+  if (axios.isAxiosError(error)) {
+    const status = error.response?.status;
+
+    if (status !== undefined && status >= 500 && status <= 599) {
+      return Promise.reject({
+        error: {
+          message: 'Внутренняя ошибка сервера',
+          code: 'SERVER_ERROR',
+        },
+        meta: {
+          traceId: '',
+          timestamp: new Date().toISOString(),
+        },
+      } satisfies ErrorResponse);
+    }
+
     if (error.response?.data) {
       return Promise.reject(error.response.data);
     }

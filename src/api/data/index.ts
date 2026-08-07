@@ -13,3 +13,4 @@ export * from './CreateChildTokenRequest';
 export * from './CreateChildTokenResponse';
 export * from './ClientInfoRequest';
 export * from './ClientInfoResponse';
+export * from './MeResponse'

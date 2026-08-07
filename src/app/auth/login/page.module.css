@@ -4,6 +4,8 @@
   place-items: center;
   padding: 24px;
   background: #0f0b17;
+
+  overflow: hidden;
 }
 
 .card {
@@ -11,7 +13,10 @@
 
   width: 100%;
   max-width: 420px;
+
   padding: 32px;
+  box-sizing: border-box;
+
   border: 1px solid #2d2236;
   border-radius: 20px;
   background: #17131f;

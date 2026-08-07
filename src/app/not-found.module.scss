@@ -1,0 +1,171 @@
+.container {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  background: var(--background);
+  color: var(--white);
+
+  font-family: var(--font-family);
+}
+
+.glow {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: rgba(255, 51, 102, 0.08);
+  filter: blur(120px);
+  pointer-events: none;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100%;
+  max-width: 560px;
+  padding: 40px;
+  text-align: center;
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 68px;
+  height: 68px;
+
+  margin-bottom: 22px;
+
+  border: 1px solid rgba(255, 51, 102, 0.2);
+  border-radius: var(--radius-md);
+
+  background: rgba(255, 51, 102, 0.06);
+  box-shadow: 0 0 40px rgba(255, 51, 102, 0.08),
+  inset 0 0 20px rgba(255, 51, 102, 0.03);
+}
+
+.icon {
+  width: 30px;
+  height: 30px;
+
+  color: var(--primary);
+  stroke-width: 1.7;
+}
+
+.code {
+  margin-bottom: 8px;
+
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+
+  color: var(--primary);
+}
+
+.content h1 {
+  margin: 0;
+
+  font-size: 32px;
+  line-height: 1.2;
+  font-weight: 700;
+
+  letter-spacing: -0.03em;
+}
+
+.content p {
+  margin: 14px 0 0;
+
+  color: var(--gray);
+
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-top: 28px;
+}
+
+.button,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  height: 44px;
+  padding: 0 18px;
+
+  border-radius: var(--radius-sm);
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: transform 0.2s ease,
+  background 0.2s ease,
+  border-color 0.2s ease;
+}
+
+.button {
+  border: 1px solid var(--primary);
+  background: var(--primary);
+  color: var(--white);
+  text-decoration: none;
+  box-shadow: 0 8px 24px rgba(255, 51, 102, 0.15);
+
+  &:hover {
+    background: #ff4775;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 28px rgba(255, 51, 102, 0.2);
+  }
+}
+
+.secondary {
+  border: 1px solid rgba(214, 220, 229, 0.12);
+  background: rgba(214, 220, 229, 0.04);
+  color: var(--gray2);
+
+  &:hover {
+    background: rgba(214, 220, 229, 0.08);
+    border-color: rgba(214, 220, 229, 0.2);
+    transform: translateY(-1px);
+  }
+}
+
+.button svg,
+.secondary svg {
+  width: 16px;
+  height: 16px;
+
+  stroke-width: 2;
+}
+
+.brand {
+  margin-top: 22px;
+
+  color: rgba(143, 136, 158, 0.45);
+
+  font-size: 12px;
+  font-weight: 500;
+
+  letter-spacing: 0.08em;
+}

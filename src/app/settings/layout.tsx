@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { FiUser, FiShield, FiKey, FiLogOut } from 'react-icons/fi';
@@ -9,8 +8,8 @@ import type { IconType } from 'react-icons';
 
 import styles from './layout.module.scss';
 import { AccessManager } from '@/src/lib/accessManager';
-import SessionPage from '@/src/app/settings/sessions/page';
 import { SessionManager } from '@/src/lib/sessionManager';
+import { AuthProvider } from '@/src/providers/AuthProvider';
 
 interface NavItem {
   label: string;
@@ -41,24 +40,31 @@ export default function SettingsLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  return (
+    <AuthProvider>
+      <SettingsContent>{children}</SettingsContent>
+    </AuthProvider>
+  );
+}
+
+function SettingsContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const router = useRouter()
+  const router = useRouter();
 
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(`${href}/`);
 
   function exit() {
-    AccessManager.remove()
-    SessionManager.removeAll()
-    router.push('/auth')
+    AccessManager.remove();
+    SessionManager.removeAll();
+
+    router.push('/auth');
   }
 
   return (
     <div className={styles.layout}>
       <aside className={styles.sidebar}>
         <div className={styles.logo}>
-          <Image src="/logo.svg" alt="ElysiaID" width={34} height={34} />
-
           <span>ElysiaID</span>
         </div>
 
