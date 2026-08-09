@@ -1,0 +1,47 @@
+.loader {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+}
+
+.ring {
+  display: block;
+
+  border: 2px solid rgba(255, 51, 102, 0.15);
+  border-top-color: var(--primary);
+
+  border-radius: 50%;
+
+  animation: spin 0.7s linear infinite;
+
+  box-shadow:
+          0 0 8px rgba(255, 51, 102, 0.2),
+          inset 0 0 4px rgba(255, 51, 102, 0.1);
+}
+
+.sm .ring {
+  width: 14px;
+  height: 14px;
+
+  border-width: 1.5px;
+}
+
+.md .ring {
+  width: 20px;
+  height: 20px;
+}
+
+.lg .ring {
+  width: 30px;
+  height: 30px;
+
+  border-width: 2.5px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

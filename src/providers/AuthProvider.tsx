@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { useMe } from '@/src/api/hooks/useMe';
 import ServerError from '@/src/components/errors/ServerError';
+import { Loader } from '@/src/components/ui/Loader/Loader';
 
 interface AuthContextValue {
   isAuthenticated: boolean;
@@ -34,27 +35,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
 
         setIsAuthenticated(true);
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-      } catch (error: never) {
+      } catch (error: unknown) {
         if (cancelled) {
           return;
         }
 
         setIsAuthenticated(false);
-        console.log("Error: "+error)
 
-        if (error?.error?.code === 'AUTH_EXPIRED') {
+        console.error('Auth check failed:', error);
+
+        const authError = error as {
+          error?: {
+            code?: string;
+          };
+        };
+
+        if (authError?.error?.code === 'AUTH_EXPIRED') {
           router.replace('/auth');
           return;
         }
 
-        if (error?.error?.code === 'SERVER_ERROR') {
+        if (authError?.error?.code === 'SERVER_ERROR') {
           setServerError(true);
           return;
         }
-
-        console.error('Auth check failed:', error);
       } finally {
         if (!cancelled) {
           setIsLoading(false);
@@ -70,7 +74,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [router]);
 
   if (isLoading) {
-    return null;
+    return (
+      <div
+        style={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Loader size="lg" />
+      </div>
+    );
   }
 
   if (serverError) {
