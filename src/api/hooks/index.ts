@@ -6,3 +6,5 @@ export * from './useRefresh';
 export * from './useCheckRefreshToken';
 export * from './useCreateChildToken';
 export * from './useGetClientInfo';
+export * from './useMe'
+export * from './useGetMeNameHistory'

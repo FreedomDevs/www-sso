@@ -1,7 +1,13 @@
 'use client';
 
-import { useEffect } from 'react';
-import { FiArrowRight, FiCopy, FiShield, FiMonitor } from 'react-icons/fi';
+import { useEffect, useState } from 'react';
+import {
+  FiArrowRight,
+  FiCopy,
+  FiShield,
+  FiMonitor,
+  FiArrowDown,
+} from 'react-icons/fi';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import clsx from 'clsx';
@@ -9,13 +15,17 @@ import clsx from 'clsx';
 import styles from './page.module.scss';
 import { useMe } from '@/src/api/hooks/useMe';
 import { Loader } from '@/src/components/ui/Loader/Loader';
+import { useGetMeNameHistory } from '@/src/api/hooks';
 
 export default function AccountPage() {
   const meMutation = useMe();
+  const getHistoryMutations = useGetMeNameHistory();
 
   useEffect(() => {
     meMutation.mutate(null);
   }, []);
+
+  const [showNameHistory, setShowNameHistory] = useState(false);
 
   const user = meMutation.data;
 
@@ -46,6 +56,15 @@ export default function AccountPage() {
     );
   }
 
+  const NameHistory = getHistoryMutations.data?.history;
+
+  function nameHistory() {
+    setShowNameHistory((prev) => !prev);
+    getHistoryMutations.mutate(null);
+
+    console.log(NameHistory)
+  }
+
   return (
     <>
       <span className={clsx(styles.glow, styles.glowLeft)} />
@@ -65,8 +84,41 @@ export default function AccountPage() {
         <div className={styles.profile}>
           <div className={styles.profileContent}>
             <span className={styles.profileLabel}>ПРОФИЛЬ</span>
+            <div className={styles.profileName}>
+              <div className={styles.profileNameBlock}>
+                <h2>{user?.name ?? 'Неизвестный пользователь'}</h2>
+                <button
+                  onClick={() => nameHistory()}
+                  className={clsx(
+                    showNameHistory ? styles.profileNameBlockButtonActive : ''
+                  )}
+                >
+                  <FiArrowDown />
+                </button>
+              </div>
 
-            <h2>{user?.name ?? 'Неизвестный пользователь'}</h2>
+              {showNameHistory && (
+                <div className={styles.nameHistory}>
+                  <div className={styles.nameHistoryHeader}>
+                    <span>История никнеймов</span>
+                  </div>
+
+                  <div className={styles.nameHistoryList}>
+                    {getHistoryMutations.isPending ? (
+                      <span>Загрузка {'>_<'}</span>
+                    ) : getHistoryMutations.isError ? (
+                      <span>Не удалось загрузить историю {'>_<'}</span>
+                    ) : NameHistory?.length ? (
+                      NameHistory.map((data) => (
+                        <span key={data.id}>{data.name}</span>
+                      ))
+                    ) : (
+                      <span>Вы ни разу не меняли ник {'>_<'}</span>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
 
             <p>Аккаунт ElysiaID</p>
           </div>

@@ -14,3 +14,4 @@ export * from './CreateChildTokenResponse';
 export * from './ClientInfoRequest';
 export * from './ClientInfoResponse';
 export * from './MeResponse'
+export * from './NameHistoryResponse'
