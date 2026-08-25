@@ -15,19 +15,22 @@ import clsx from 'clsx';
 import styles from './page.module.scss';
 import { useMe } from '@/src/api/hooks/useMe';
 import { Loader } from '@/src/components/ui/Loader/Loader';
-import { useGetMeNameHistory } from '@/src/api/hooks';
+import { useGetMeNameHistory, useGetMyIntegrations } from '@/src/api/hooks';
 
 export default function AccountPage() {
   const meMutation = useMe();
   const getHistoryMutations = useGetMeNameHistory();
+  const myIntegrationsMutation = useGetMyIntegrations()
 
   useEffect(() => {
     meMutation.mutate(null);
+    myIntegrationsMutation.mutate(null);
   }, []);
 
   const [showNameHistory, setShowNameHistory] = useState(false);
 
   const user = meMutation.data;
+  const integrations = myIntegrationsMutation.data;
 
   const formattedDate = user?.createdAt
     ? new Date(user.createdAt).toLocaleString('ru-RU', {
@@ -144,13 +147,17 @@ export default function AccountPage() {
               <div className={styles.field}>
                 <span className={styles.label}>Имя пользователя</span>
 
-                <span className={styles.value}>{user?.name ?? '—'}</span>
+                <span className={styles.value}>
+                  {user?.name ?? 'Загрузка >_<'}
+                </span>
               </div>
 
               <div className={styles.field}>
                 <span className={styles.label}>Email</span>
 
-                <span className={styles.value}>—</span>
+                <span className={styles.value}>
+                  {integrations?.email ?? 'Загрузка >_<'}
+                </span>
               </div>
 
               <div className={styles.field}>

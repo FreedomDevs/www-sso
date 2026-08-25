@@ -1,4 +1,4 @@
-import { ssoApi } from '@/src/api/instance';
+import { api, ssoApi } from '@/src/api/instance';
 import {
   LoginResponse,
   SuccessResponse,
@@ -14,6 +14,8 @@ import {
   CreateChildTokenResponse,
   ClientInfoRequest,
   ClientInfoResponse,
+  NameHistoryResponse,
+  GetMyIntegrationsResponse,
 } from '@/src/api/data';
 import { RefreshResponse } from '@/src/api/data/RefreshResponse';
 
@@ -117,6 +119,20 @@ export const clientInfo = async (
 ): Promise<ClientInfoResponse> => {
   const response = await ssoApi.get<SuccessResponse<ClientInfoResponse>>(
     `/auth/client_info/${data.client_id}`
+  );
+
+  if (!response.data.data) {
+    throw new Error('Response data is missing');
+  }
+
+  return response.data.data;
+};
+
+// С авторизацией по jwt >_<
+
+export const getMyIntegrations = async (): Promise<GetMyIntegrationsResponse> => {
+  const response = await api.get<SuccessResponse<GetMyIntegrationsResponse>>(
+    '/auth/get_my_integrations'
   );
 
   if (!response.data.data) {
