@@ -7,6 +7,7 @@ import {
   FiShield,
   FiMonitor,
   FiArrowDown,
+  FiEdit3,
 } from 'react-icons/fi';
 import Link from 'next/link';
 import { toast } from 'sonner';
@@ -90,14 +91,29 @@ export default function AccountPage() {
             <div className={styles.profileName}>
               <div className={styles.profileNameBlock}>
                 <h2>{user?.name ?? 'Неизвестный пользователь'}</h2>
-                <button
-                  onClick={() => nameHistory()}
-                  className={clsx(
-                    showNameHistory ? styles.profileNameBlockButtonActive : ''
-                  )}
-                >
-                  <FiArrowDown />
-                </button>
+
+                <div className={styles.profileNameActions}>
+                  <button
+                    type="button"
+                    onClick={() => setShowNameHistory((prev) => !prev)}
+                    className={clsx(
+                      styles.profileNameButton,
+                      showNameHistory && styles.profileNameButtonActive
+                    )}
+                    aria-label="История никнеймов"
+                  >
+                    <FiArrowDown />
+                  </button>
+
+                  <button
+                    type="button"
+                    className={styles.profileNameButton}
+                    // onClick={() => setShowChangeName(true)}
+                    aria-label="Изменить никнейм"
+                  >
+                    <FiEdit3 />
+                  </button>
+                </div>
               </div>
 
               {showNameHistory && (
@@ -113,10 +129,14 @@ export default function AccountPage() {
                       <span>Не удалось загрузить историю {'>_<'}</span>
                     ) : NameHistory?.length ? (
                       NameHistory.map((data) => (
-                        <span key={data.id}>{data.name}</span>
+                        <div className={styles.nameHistoryItem} key={data.id}>
+                          <span>{data.name}</span>
+                        </div>
                       ))
                     ) : (
-                      <span>Вы ни разу не меняли ник {'>_<'}</span>
+                      <span className={styles.emptyHistory}>
+                        Вы ни разу не меняли ник {'>_<'}
+                      </span>
                     )}
                   </div>
                 </div>
