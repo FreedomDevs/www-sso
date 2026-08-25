@@ -16,3 +16,4 @@ export * from './ClientInfoResponse';
 export * from './MeResponse'
 export * from './NameHistoryResponse'
 export * from './GetMyIntegrationsResponse'
+export * from './UpdateMyNameData'

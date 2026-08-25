@@ -9,3 +9,4 @@ export * from './useGetClientInfo';
 export * from './useMe';
 export * from './useGetMeNameHistory';
 export * from './useGetMyIntegrations';
+export * from './useUpdateMyName'

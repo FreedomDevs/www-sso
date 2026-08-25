@@ -22,18 +22,19 @@ import { ChangeNameModal } from '@/src/components/ui/modals/ChangeNameModal/Chan
 export default function AccountPage() {
   const meMutation = useMe();
   const getHistoryMutations = useGetMeNameHistory();
-  const myIntegrationsMutation = useGetMyIntegrations()
+  const myIntegrationsMutation = useGetMyIntegrations();
+
+  const [showNameHistory, setShowNameHistory] = useState(false);
+  const [showChangeName, setShowChangeName] = useState(false);
 
   useEffect(() => {
     meMutation.mutate(null);
     myIntegrationsMutation.mutate(null);
   }, []);
 
-  const [showNameHistory, setShowNameHistory] = useState(false);
-  const [showChangeName, setShowChangeName] = useState(false);
-
   const user = meMutation.data;
   const integrations = myIntegrationsMutation.data;
+  const nameHistory = getHistoryMutations.data?.history;
 
   const formattedDate = user?.createdAt
     ? new Date(user.createdAt).toLocaleString('ru-RU', {
@@ -53,6 +54,19 @@ export default function AccountPage() {
     toast.success('ID успешно скопирован!');
   };
 
+  const toggleNameHistory = () => {
+    setShowNameHistory((prev) => !prev);
+
+    if (!getHistoryMutations.data && !getHistoryMutations.isPending) {
+      getHistoryMutations.mutate(null);
+    }
+  };
+
+  const handleNameChanged = () => {
+    meMutation.mutate(null);
+    getHistoryMutations.mutate(null);
+  };
+
   if (meMutation.isPending && !user) {
     return (
       <section className={styles.loading}>
@@ -62,19 +76,11 @@ export default function AccountPage() {
     );
   }
 
-  const NameHistory = getHistoryMutations.data?.history;
-
-  function nameHistory() {
-    setShowNameHistory((prev) => !prev);
-    if (!getHistoryMutations.data && !getHistoryMutations.isPending) {
-      getHistoryMutations.mutate(null);
-    }
-  }
-
   return (
     <>
       <span className={clsx(styles.glow, styles.glowLeft)} />
       <span className={clsx(styles.glow, styles.glowRight)} />
+
       <section className={styles.page}>
         <header className={styles.header}>
           <div className={styles.icon}>
@@ -90,6 +96,7 @@ export default function AccountPage() {
         <div className={styles.profile}>
           <div className={styles.profileContent}>
             <span className={styles.profileLabel}>ПРОФИЛЬ</span>
+
             <div className={styles.profileName}>
               <div className={styles.profileNameBlock}>
                 <h2>{user?.name ?? 'Неизвестный пользователь'}</h2>
@@ -97,7 +104,7 @@ export default function AccountPage() {
                 <div className={styles.profileNameActions}>
                   <button
                     type="button"
-                    onClick={() => setShowNameHistory((prev) => !prev)}
+                    onClick={toggleNameHistory}
                     className={clsx(
                       styles.profileNameButton,
                       showNameHistory && styles.profileNameButtonActive
@@ -129,8 +136,8 @@ export default function AccountPage() {
                       <span>Загрузка {'>_<'}</span>
                     ) : getHistoryMutations.isError ? (
                       <span>Не удалось загрузить историю {'>_<'}</span>
-                    ) : NameHistory?.length ? (
-                      NameHistory.map((data) => (
+                    ) : nameHistory?.length ? (
+                      nameHistory.map((data) => (
                         <div className={styles.nameHistoryItem} key={data.id}>
                           <span>{data.name}</span>
                         </div>
@@ -148,6 +155,7 @@ export default function AccountPage() {
                 <ChangeNameModal
                   currentName={user?.name ?? ''}
                   onClose={() => setShowChangeName(false)}
+                  onNameChanged={handleNameChanged}
                 />
               )}
             </div>
