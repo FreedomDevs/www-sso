@@ -17,6 +17,7 @@ import styles from './page.module.scss';
 import { useMe } from '@/src/api/hooks/useMe';
 import { Loader } from '@/src/components/ui/Loader/Loader';
 import { useGetMeNameHistory, useGetMyIntegrations } from '@/src/api/hooks';
+import { ChangeNameModal } from '@/src/components/ui/modals/ChangeNameModal/ChangeNameModal';
 
 export default function AccountPage() {
   const meMutation = useMe();
@@ -29,6 +30,7 @@ export default function AccountPage() {
   }, []);
 
   const [showNameHistory, setShowNameHistory] = useState(false);
+  const [showChangeName, setShowChangeName] = useState(false);
 
   const user = meMutation.data;
   const integrations = myIntegrationsMutation.data;
@@ -108,7 +110,7 @@ export default function AccountPage() {
                   <button
                     type="button"
                     className={styles.profileNameButton}
-                    // onClick={() => setShowChangeName(true)}
+                    onClick={() => setShowChangeName(true)}
                     aria-label="Изменить никнейм"
                   >
                     <FiEdit3 />
@@ -140,6 +142,13 @@ export default function AccountPage() {
                     )}
                   </div>
                 </div>
+              )}
+
+              {showChangeName && (
+                <ChangeNameModal
+                  currentName={user?.name ?? ''}
+                  onClose={() => setShowChangeName(false)}
+                />
               )}
             </div>
 
