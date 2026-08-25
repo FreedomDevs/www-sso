@@ -63,9 +63,9 @@ export default function AccountPage() {
 
   function nameHistory() {
     setShowNameHistory((prev) => !prev);
-    getHistoryMutations.mutate(null);
-
-    console.log(NameHistory)
+    if (!getHistoryMutations.data && !getHistoryMutations.isPending) {
+      getHistoryMutations.mutate(null);
+    }
   }
 
   return (
