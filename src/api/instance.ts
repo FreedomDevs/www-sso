@@ -4,6 +4,7 @@ import { ErrorResponse } from '@/src/api/data';
 import { AccessManager } from '@/src/lib/accessManager';
 import { SessionManager } from '@/src/lib/sessionManager';
 import { refresh } from '@/src/api/request';
+import { Session } from 'node:inspector';
 
 declare module 'axios' {
   interface AxiosRequestConfig {
@@ -110,8 +111,16 @@ api.interceptors.response.use(
         })
           .then((response) => {
             AccessManager.set(response.token);
-
             return response.token;
+          })
+          .catch((error)  => {
+            AccessManager.remove()
+            const session = SessionManager.getCurrent()
+            if (session) {
+              SessionManager.remove(session?.masterToken)
+            }
+
+            throw error
           })
           .finally(() => {
             refreshPromise = null;
@@ -124,6 +133,16 @@ api.interceptors.response.use(
 
       return api(originalRequest);
     } catch {
+      AccessManager.remove();
+      SessionManager.removeAll() // TODO: Исправить в ближайшем времени
+      // const session = SessionManager.getCurrent();
+      // console.log('Catch3: ' + session);
+      // if (session) {
+      //   console.log('Catch4');
+      //
+      //   SessionManager.remove(session?.masterToken);
+      // }
+
       return Promise.reject({
         error: {
           message: 'Сессия истекла. Требуется повторный вход',
