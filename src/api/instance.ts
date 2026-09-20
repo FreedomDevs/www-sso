@@ -1,85 +1,133 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { apiConfig } from '@/src/config/api.config';
 import { ErrorResponse } from '@/src/api/data';
 import { AccessManager } from '@/src/lib/accessManager';
 import { SessionManager } from '@/src/lib/sessionManager';
 import { refresh } from '@/src/api/request';
-import { Session } from 'node:inspector';
 
 declare module 'axios' {
   interface AxiosRequestConfig {
-    _retry?: boolean
+    _retry?: boolean;
   }
 }
 
+// TODO: ПЕРЕПИСАТЬ ЭТО ГОВНО НАХУЙ
+
+const createError = (
+  message: string,
+  code: ErrorResponse['error']['code']
+): ErrorResponse => ({
+  error: {
+    message,
+    code,
+  },
+  meta: {
+    traceId: '',
+    timestamp: new Date().toISOString(),
+  },
+});
+
 const onError = (error: unknown) => {
-  if (axios.isAxiosError(error)) {
-    const status = error.response?.status;
-
-    if (status !== undefined && status >= 500 && status <= 599) {
-      return Promise.reject({
-        error: {
-          message: 'Внутренняя ошибка сервера',
-          code: 'SERVER_ERROR',
-        },
-        meta: {
-          traceId: '',
-          timestamp: new Date().toISOString(),
-        },
-      } satisfies ErrorResponse);
-    }
-
-    if (error.response?.data) {
-      return Promise.reject(error.response.data);
-    }
-
-    return Promise.reject({
-      error: {
-        message: 'Не удалось подключиться к серверу',
-        code: 'NETWORK_ERROR',
-      },
-      meta: {
-        traceId: '',
-        timestamp: new Date().toISOString(),
-      },
-    } satisfies ErrorResponse);
+  if (!axios.isAxiosError(error)) {
+    return Promise.reject(
+      createError('Сессия истекла. Требуется повторный вход', 'AUTH_EXPIRED')
+    );
   }
 
-  return Promise.reject({
-    error: {
-      message: 'Неизвестная ошибка',
-      code: 'UNKNOWN',
-    },
-    meta: {
-      traceId: '',
-      timestamp: new Date().toISOString(),
-    },
-  } satisfies ErrorResponse);
+  const status = error.response?.status;
+
+  if (status !== undefined && status >= 500 && status <= 599) {
+    return Promise.reject(
+      createError('Внутренняя ошибка сервера', 'SERVER_ERROR')
+    );
+  }
+
+  if (error.response?.data) {
+    return Promise.reject(error.response.data);
+  }
+
+  return Promise.reject(
+    createError('Не удалось подключиться к серверу', 'NETWORK_ERROR')
+  );
 };
 
-// Для работы с SSO
+const authExpired = () =>
+  Promise.reject(
+    createError('Сессия истекла. Требуется повторный вход', 'AUTH_EXPIRED')
+  );
+
+const clearSession = () => {
+  AccessManager.remove();
+  SessionManager.removeAll(); // TODO: Исправить в ближайшем времени
+};
+
 export const ssoApi = axios.create({
   baseURL: apiConfig.baseURL,
 });
 
-// Для API приложения
 export const api = axios.create({
   baseURL: apiConfig.baseURL,
 });
 
-ssoApi.interceptors.response.use((response) => response, onError);
+let refreshPromise: Promise<string> | null = null;
 
-api.interceptors.request.use((config) => {
+const refreshAccessToken = async (): Promise<string> => {
+  if (refreshPromise) {
+    return refreshPromise;
+  }
+
+  const session = SessionManager.getCurrent();
+
+  if (!session) {
+    throw new Error('NO_SESSION');
+  }
+
+  refreshPromise = refresh({
+    method: 'Web',
+    refresh_token: session.masterToken,
+  })
+    .then((response) => {
+      AccessManager.set(response.token);
+      return response.token;
+    })
+    .catch((error) => {
+      clearSession();
+      throw error;
+    })
+    .finally(() => {
+      refreshPromise = null;
+    });
+
+  return refreshPromise;
+};
+
+const setAuthorization = (
+  config: InternalAxiosRequestConfig,
+  token: string
+) => {
+  config.headers.Authorization = `Bearer ${token}`;
+};
+
+api.interceptors.request.use(async (config) => {
   const token = AccessManager.get();
 
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    setAuthorization(config, token);
+    return config;
   }
 
-  return config;
-});
+  try {
+    const accessToken = await refreshAccessToken();
 
-let refreshPromise: Promise<string> | null = null;
+    setAuthorization(config, accessToken);
+
+    return config;
+  } catch {
+    clearSession();
+
+    return authExpired();
+  }
+});
 
 api.interceptors.response.use(
   (response) => response,
@@ -98,61 +146,15 @@ api.interceptors.response.use(
     originalRequest._retry = true;
 
     try {
-      if (!refreshPromise) {
-        const session = SessionManager.getCurrent();
+      const accessToken = await refreshAccessToken();
 
-        if (!session) {
-          throw new Error('NO_SESSION');
-        }
-
-        refreshPromise = refresh({
-          method: 'Web',
-          refresh_token: session.masterToken,
-        })
-          .then((response) => {
-            AccessManager.set(response.token);
-            return response.token;
-          })
-          .catch((error)  => {
-            AccessManager.remove()
-            const session = SessionManager.getCurrent()
-            if (session) {
-              SessionManager.remove(session?.masterToken)
-            }
-
-            throw error
-          })
-          .finally(() => {
-            refreshPromise = null;
-          });
-      }
-
-      const accessToken = await refreshPromise;
-
-      originalRequest.headers.setAuthorization(`Bearer ${accessToken}`);
+      setAuthorization(originalRequest, accessToken);
 
       return api(originalRequest);
     } catch {
-      AccessManager.remove();
-      SessionManager.removeAll() // TODO: Исправить в ближайшем времени
-      // const session = SessionManager.getCurrent();
-      // console.log('Catch3: ' + session);
-      // if (session) {
-      //   console.log('Catch4');
-      //
-      //   SessionManager.remove(session?.masterToken);
-      // }
+      clearSession();
 
-      return Promise.reject({
-        error: {
-          message: 'Сессия истекла. Требуется повторный вход',
-          code: 'AUTH_EXPIRED',
-        },
-        meta: {
-          traceId: '',
-          timestamp: new Date().toISOString(),
-        },
-      } satisfies ErrorResponse);
+      return authExpired();
     }
   }
 );
