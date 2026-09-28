@@ -58,8 +58,8 @@ export function RegisterForm() {
         {registerF.isPending ? 'Входим...' : 'Продолжить'}
       </Button>
 
-      <AuthDivider />
-      <AuthSocials />
+      {/*<AuthDivider />*/}
+      {/*<AuthSocials />*/}
 
       <AuthFooter
         text="Уже есть аккаунт?"

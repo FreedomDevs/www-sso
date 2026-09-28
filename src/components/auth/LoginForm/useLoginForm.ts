@@ -36,6 +36,7 @@ export function useLoginForm() {
       router.replace('/');
     },
     onError(error) {
+      console.log(error)
       toast.error(error.error.message);
       form.setError('root', {
         type: 'server',

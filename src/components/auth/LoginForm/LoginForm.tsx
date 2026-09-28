@@ -5,10 +5,8 @@ import { Button } from '@/src/components/ui/Button';
 
 import styles from './LoginForm.module.css';
 import {
-  AuthDivider,
   AuthFooter,
   AuthLinks,
-  AuthSocials,
   authValidation,
 } from '@/src/components/auth/components';
 import { useLoginForm } from '@/src/components/auth/LoginForm/useLoginForm';
@@ -27,9 +25,9 @@ export function LoginForm() {
         id="login"
         placeholder="имя пользователя"
         variant="default"
-        label="Login"
+        label="Login or email"
         error={errors.login?.message}
-        {...register('login', authValidation.login)}
+        {...register('login', authValidation.loginOrEmail)}
       />
 
       <Input
@@ -50,9 +48,9 @@ export function LoginForm() {
         {login.isPending ? 'Входим...' : 'Продолжить'}
       </Button>
 
-      <AuthDivider />
+      {/*<AuthDivider />*/}
 
-      <AuthSocials />
+      {/*<AuthSocials />*/}
 
       <AuthLinks />
 

@@ -23,6 +23,14 @@ export const authValidation = {
     },
   },
 
+  loginOrEmail: {
+    required: 'Введите логин или Email',
+    minLength: {
+      value: 3,
+      message: 'Логин или Email минимум 3 символа',
+    },
+  },
+
   password: {
     required: 'Введите пароль',
     minLength: {

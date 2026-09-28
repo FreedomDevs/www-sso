@@ -16,6 +16,8 @@ import {
   ClientInfoResponse,
   NameHistoryResponse,
   GetMyIntegrationsResponse,
+  RefreshPasswordRequest,
+  RefreshPasswordResponse,
 } from '@/src/api/data';
 import { RefreshResponse } from '@/src/api/data/RefreshResponse';
 
@@ -119,6 +121,21 @@ export const clientInfo = async (
 ): Promise<ClientInfoResponse> => {
   const response = await ssoApi.get<SuccessResponse<ClientInfoResponse>>(
     `/auth/client_info/${data.client_id}`
+  );
+
+  if (!response.data.data) {
+    throw new Error('Response data is missing');
+  }
+
+  return response.data.data;
+};
+
+export const refreshPassword = async (
+  data: RefreshPasswordRequest
+): Promise<RefreshPasswordResponse> => {
+  const response = await ssoApi.post<SuccessResponse<RefreshPasswordResponse>>(
+    '/auth/refresh_password',
+    data
   );
 
   if (!response.data.data) {
