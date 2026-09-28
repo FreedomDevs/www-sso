@@ -6,7 +6,7 @@ import { Input } from '@/src/components/ui/Input';
 import styles from './page.module.scss';
 import { useForm } from 'react-hook-form';
 import { useRefreshPassword } from '@/src/api/hooks/useRefreshPassword';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 interface ForgotPasswordForm {
@@ -16,12 +16,11 @@ interface ForgotPasswordForm {
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const form = useForm<ForgotPasswordForm>();
   const refreshPasswordMutation = useRefreshPassword({
     onSuccess: (data) => {
-      const params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams();
 
       params.set('emailToken', data.email_verefication_token);
       params.set('email', form.getValues('login_or_email'));
