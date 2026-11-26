@@ -1,46 +1,32 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import '../styles/globals.scss';
-import { Toaster } from 'sonner';
-import { TanstackQueryProvider } from '@/src/providers';
+import { Toaster } from '@/shared/components/ui';
+import '@/styles/globals.scss';
+import { Providers } from '@/core/providers';
 
-const inter = Inter({
+const sans = Inter({
   subsets: ['latin', 'cyrillic'],
-  weight: ['400', '500', '600', '700', '800'],
-  variable: '--font-inter',
+  variable: '--font-next-sans',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
   title: 'ElysiaID',
   icons: {
-    icon: [
-      {
-        url: '/logo.svg',
-        type: 'image/svg+xml',
-      },
-    ],
+    icon: [{ url: '/logo.svg', type: 'image/svg+xml' }],
   },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="ru" className={inter.variable}>
+    <html lang="ru" data-theme="dark" className={sans.variable}>
       <body>
-        <TanstackQueryProvider>
-          {children}
-          <Toaster
-            theme="dark"
-            position="top-center"
-            richColors
-            toastOptions={{
-              className: 'toast',
-            }}
-          />
-        </TanstackQueryProvider>
+        <Providers>{children}</Providers>
+        <Toaster />
       </body>
     </html>
   );

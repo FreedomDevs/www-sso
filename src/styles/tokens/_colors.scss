@@ -1,0 +1,89 @@
+:root {
+  --rose-300: #f7b7c4;
+  --rose-400: #f4a7b9;
+  --rose-500: #ee8fa6;
+  --peach-400: #ffb58c;
+  --red-400: #ff7a8a;
+  --green-400: #7fd6a4;
+  --amber-400: #ffcc7a;
+  --blue-400: #8ab8ff;
+}
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-bg: #17121a;
+  --color-surface: #211a24;
+  --color-surface-2: #2a2130;
+  --color-line: #3a2e3d;
+  --color-line-strong: #52425a;
+  --color-text: #f7ebe8;
+  --color-muted: #b5a2a8;
+
+  --color-accent: var(--rose-400);
+  --color-accent-hover: var(--rose-300);
+  --color-accent-active: var(--rose-500);
+  --color-accent-alt: var(--peach-400);
+  --color-accent-text: #f7b7c4;
+  --color-on-accent: #2a1620;
+
+  --color-danger: var(--red-400);
+  --color-danger-bg: rgba(255, 122, 138, 0.12);
+  --color-danger-line: rgba(255, 122, 138, 0.35);
+  --color-success: var(--green-400);
+  --color-success-bg: rgba(127, 214, 164, 0.12);
+  --color-success-line: rgba(127, 214, 164, 0.35);
+  --color-warning: var(--amber-400);
+  --color-warning-bg: rgba(255, 204, 122, 0.12);
+  --color-warning-line: rgba(255, 204, 122, 0.35);
+  --color-info: var(--blue-400);
+  --color-info-bg: rgba(138, 184, 255, 0.12);
+  --color-info-line: rgba(138, 184, 255, 0.35);
+
+  --color-focus: rgba(244, 167, 185, 0.6);
+  --color-overlay: rgba(10, 6, 12, 0.72);
+  --color-input-bg: #1c1620;
+
+  --glow-a: rgba(244, 167, 185, 0.28);
+  --glow-b: rgba(255, 181, 140, 0.2);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+
+  --color-bg: #fbf4f2;
+  --color-surface: #ffffff;
+  --color-surface-2: #f6ebe8;
+  --color-line: #eadad8;
+  --color-line-strong: #d5bfbd;
+  --color-text: #2a1620;
+  --color-muted: #7a6670;
+
+  --color-accent: #c94f72;
+  --color-accent-hover: #b94467;
+  --color-accent-active: #a43a5b;
+  --color-accent-alt: #e0803f;
+  --color-accent-text: #b03c60;
+  --color-on-accent: #ffffff;
+
+  --color-danger: #c9364b;
+  --color-danger-bg: rgba(201, 54, 75, 0.08);
+  --color-danger-line: rgba(201, 54, 75, 0.3);
+  --color-success: #1f8a55;
+  --color-success-bg: rgba(31, 138, 85, 0.08);
+  --color-success-line: rgba(31, 138, 85, 0.3);
+  --color-warning: #a86a00;
+  --color-warning-bg: rgba(168, 106, 0, 0.08);
+  --color-warning-line: rgba(168, 106, 0, 0.3);
+  --color-info: #2f6fd0;
+  --color-info-bg: rgba(47, 111, 208, 0.08);
+  --color-info-line: rgba(47, 111, 208, 0.3);
+
+  --color-focus: rgba(201, 79, 114, 0.5);
+  --color-overlay: rgba(42, 22, 32, 0.45);
+  --color-input-bg: #ffffff;
+
+  --glow-a: rgba(244, 167, 185, 0.35);
+  --glow-b: rgba(255, 181, 140, 0.28);
+}

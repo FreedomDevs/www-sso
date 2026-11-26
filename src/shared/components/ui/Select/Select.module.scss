@@ -1,0 +1,39 @@
+@use '../control' as *;
+
+.wrapper {
+  @include control-box;
+  position: relative;
+}
+
+.sm {
+  height: var(--control-height-sm);
+}
+
+.lg {
+  height: var(--control-height-lg);
+}
+
+.select {
+  @include control-field;
+  appearance: none;
+  padding-right: var(--space-6);
+  cursor: pointer;
+
+  option {
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+}
+
+.sm .select {
+  font-size: var(--text-sm);
+}
+
+.chevron {
+  position: absolute;
+  right: var(--space-3);
+  width: 1.1rem;
+  height: 1.1rem;
+  color: var(--color-muted);
+  pointer-events: none;
+}

@@ -1,0 +1,20 @@
+.line {
+  height: 0;
+  border-top: 1px solid var(--color-line);
+}
+
+.labeled {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--color-line);
+  }
+}

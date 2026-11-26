@@ -1,0 +1,92 @@
+.shell {
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: var(--space-8) var(--space-4);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  width: 100%;
+  max-width: var(--container-auth);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.submit {
+  margin-top: var(--space-2);
+}
+
+.hint {
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+  text-align: center;
+}
+
+.email {
+  color: var(--color-text);
+  font-weight: var(--weight-medium);
+}
+
+.resend {
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+  text-align: center;
+}
+
+.linkButton {
+  color: var(--color-accent-text);
+  font-weight: var(--weight-medium);
+
+  &:hover:not(:disabled) {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  &:disabled {
+    color: var(--color-muted);
+  }
+}
+
+
+.formError {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-danger-line);
+  border-radius: var(--radius-md);
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  animation: formErrorIn var(--duration-base) var(--ease-out);
+}
+
+.formErrorTrace {
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  user-select: all; // удобно скопировать целиком
+}
+
+@keyframes formErrorIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .formError {
+    animation: none;
+  }
+}
+
+.termsField .formError { margin-top: 8px; }

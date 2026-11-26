@@ -1,0 +1,72 @@
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  width: clamp(24rem, 55vmax, 55rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform;
+  filter: blur(80px);
+  opacity: 0.65;
+}
+
+body::before {
+  top: -35%;
+  left: -25%;
+  background: radial-gradient(
+          circle,
+          var(--glow-a) 0%,
+          color-mix(in srgb, var(--glow-a) 55%, transparent) 35%,
+          transparent 70%
+  );
+  animation: lava-a 38s ease-in-out infinite alternate;
+}
+
+body::after {
+  right: -30%;
+  bottom: -40%;
+  background: radial-gradient(
+          circle,
+          var(--glow-b) 0%,
+          color-mix(in srgb, var(--glow-b) 55%, transparent) 35%,
+          transparent 70%
+  );
+  animation: lava-b 48s ease-in-out infinite alternate;
+}
+
+@keyframes lava-a {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(18%, 24%, 0) scale(1.15, 0.9);
+  }
+
+  100% {
+    transform: translate3d(8%, 45%, 0) scale(0.9, 1.1);
+  }
+}
+
+@keyframes lava-b {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(-22%, -18%, 0) scale(0.9, 1.15);
+  }
+
+  100% {
+    transform: translate3d(-35%, -8%, 0) scale(1.12, 0.9);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  body::after {
+    animation: none;
+  }
+}
